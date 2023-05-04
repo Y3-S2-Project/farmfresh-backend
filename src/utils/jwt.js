@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-export const sendTokenResponse = async (res, user, message) => {
-  const accessToken = generateToken(user)
+export const sendTokenResponse = async ({ res, data, message }) => {
+  const accessToken = generateToken(data)
 
   res.status(200).json({
-    data: { user, access_token: accessToken },
+    data: { user: data, access_token: accessToken },
     message,
   })
 }
