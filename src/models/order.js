@@ -41,7 +41,7 @@ const OrderSchema = new Schema(
     },
   },
   {
-    timestamp: true,
+    timestamps: true,
     versionKey: false,
   },
 )
