@@ -1,5 +1,4 @@
 import { model, Schema } from 'mongoose'
-import mongoose from 'mongoose';
 
 const OrderSchema = new Schema(
   {
@@ -8,13 +7,14 @@ const OrderSchema = new Schema(
       required: true,
     },
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
     products: [
         {
             product_id: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: 'Product',
             },
             quantity: {
@@ -31,12 +31,13 @@ const OrderSchema = new Schema(
         type: String,
         default: 'Pending',
     },
-    delivery_option: {
-        type: String,
-    },
-    delivery_address: {
-        type: mongoose.Schema.Types.ObjectId,
+    delivery_id: {
+        type: Schema.Types.ObjectId,
         ref: 'Logistics',
+    },
+    total_price: {
+        type: Number,
+        default: 0,
     },
   },
   {
