@@ -1,15 +1,11 @@
 import { Router } from 'express'
-import { adminSignUp, buyerSignUp, login, logout, sellerSignUp } from '../controllers/auth'
-import { adminRegProtect, protect } from '../middleware/auth'
-import { ROLES } from '../utils/constants'
-import { Segments, celebrate } from 'celebrate'
-import { buyerSignUpSchema } from '../validations/auth'
+import { signUp, login, logout } from '../controllers/auth'
 
 const router = Router()
 
-router.post('/signup/buyer', celebrate({ [Segments.BODY]: buyerSignUpSchema }), buyerSignUp)
-router.post('/signup/farmer', sellerSignUp)
-router.post('/signup/admin', adminSignUp)
+router.post('/signup/buyer', signUp)
+router.post('/signup/farmer', signUp)
+router.post('/signup/admin', signUp)
 router.patch('/login', login)
 router.patch('/logout', logout)
 
