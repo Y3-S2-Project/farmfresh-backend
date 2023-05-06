@@ -1,4 +1,3 @@
-import { createUser } from '../database/firebase'
 import { createUserRepository, loginRepository, logoutRepository } from '../repositories/auth'
 
 export const buyerSignUpService = async (data) => {
@@ -6,9 +5,7 @@ export const buyerSignUpService = async (data) => {
 }
 
 export const sellerSignUpService = async (data) => {
-  const { email, password } = data
-  const { uid } = await createUser(email, password)
-  return await createUserRepository({ ...data, uid })
+  return await createUserRepository(data)
 }
 
 export const adminSignUpService = async (data) => {

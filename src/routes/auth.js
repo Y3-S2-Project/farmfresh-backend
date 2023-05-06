@@ -8,7 +8,7 @@ import { buyerSignUpSchema } from '../validations/auth'
 const router = Router()
 
 router.post('/signup/buyer', celebrate({ [Segments.BODY]: buyerSignUpSchema }), buyerSignUp)
-router.post('/signup/seller', sellerSignUp)
+router.post('/signup/farmer', sellerSignUp)
 router.post('/signup/admin', adminSignUp)
 router.patch('/login', login)
 router.patch('/logout', logout)
