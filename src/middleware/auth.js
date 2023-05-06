@@ -20,22 +20,3 @@ export const protect = (role) =>
     req.user = user
     next()
   })
-
-export const adminRegProtect = asyncHandler(async (req, res, next) => {
-  const token = req.headers.authorization
-    ? req.headers.authorization.startsWith('Bearer')
-      ? req.headers.authorization.split(' ')[1]
-      : null
-    : null
-
-  const decodedUser = decodeJwtToken(token).data
-
-  const user = decodedUser ? await getUserRepository(uid) : null
-  if (user?.current_user_role === 'ADMIN') {
-    req.user = user
-  } else {
-    req.user = null
-  }
-
-  next()
-})
