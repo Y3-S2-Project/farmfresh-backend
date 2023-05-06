@@ -1,36 +1,38 @@
 import asyncHandler from '../middleware/asyncHandler'
 import { makeResponse } from '../utils/response'
-import {
-  adminSignUpService,
-  buyerSignUpService,
-  loginService,
-  logoutService,
-  sellerSignUpService,
-} from '../services/auth'
+import { signUpService, loginService, logoutService } from '../services/auth'
 import { sendTokenResponse } from '../utils/jwt'
+import { ROLES } from '../utils/constants'
 
-export const buyerSignUp = asyncHandler(async (req, res) => {
-  const result = await buyerSignUpService(req.body)
-  if (!result) return makeResponse({ res, status: 500, message: 'Error signing up buyer' })
-  if (result.status === 409)
-    return makeResponse({ res, status: 409, message: 'Buyer already exists' })
-  return sendTokenResponse({ res, data: result, message: 'Buyer signed up successfully' })
-})
+const getMessageByRole = (role) => {
+  switch (role) {
+    case ROLES.BUYER:
+      return {
+        no_results_status: 'Error signing up buyer',
+        status_409: 'Buyer already exists',
+        success: 'Buyer signed up successfully',
+      }
+    case ROLES.FARMER:
+      return {
+        no_results_status: 'Error signing up farmer',
+        status_409: 'Farmer already exists',
+        success: 'Farmer signed up successfully',
+      }
+    case ROLES.ADMIN:
+      return {
+        no_results_status: 'Error signing up admin',
+        status_409: 'Admin already exists',
+        success: 'Admin signed up successfully',
+      }
+  }
+}
 
-export const sellerSignUp = asyncHandler(async (req, res) => {
-  const result = await sellerSignUpService(req.body)
-  if (!result) return makeResponse({ res, status: 500, message: 'Error signing up seller' })
-  if (result.status === 409)
-    return makeResponse({ res, status: 409, message: 'Seller already exists' })
-  return sendTokenResponse({ res, data: result, message: 'Seller signed up successfully' })
-})
-
-export const adminSignUp = asyncHandler(async (req, res) => {
-  const result = await adminSignUpService(req.body)
-  if (!result) return makeResponse({ res, status: 500, message: 'Error signing up admin' })
-  if (result.status === 409)
-    return makeResponse({ res, status: 409, message: 'Admin already exists' })
-  return sendTokenResponse({ res, data: result, message: 'Admin signed up successfully' })
+export const signUp = asyncHandler(async (req, res) => {
+  const result = await signUpService(req.body)
+  const { no_results_status, status_409, success } = getMessageByRole(req.body.current_user_role)
+  if (!result) return makeResponse({ res, status: 500, message: no_results_status })
+  if (result.status === 409) return makeResponse({ res, status: 409, message: status_409 })
+  return sendTokenResponse({ res, data: result, message: success })
 })
 
 export const login = asyncHandler(async (req, res) => {
