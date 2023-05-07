@@ -1,51 +1,47 @@
-import Product from "../models/product.js";
-import logger from "../utils/logger.js";
+import Product from '../models/product.js'
+
+
 // method to get all products
 export const findProducts = async (farmerId) => {
   //chec whether products are available or not
   //if available return the products else return error
   try {
-    let products = null;
+    let products = null
 
     if (farmerId) {
       products = await Product.find({
         farmer: farmerId,
       }).sort({
         _id: -1,
-      });
+      })
     } else {
-      products = await Product.find().sort({ _id: -1 });
+      products = await Product.find().sort({ _id: -1 })
     }
     if (products?.length == 0) {
-      const error = new Error("Products not found");
-      error.status = 404;
-      throw error;
+      const error = new Error('Products not found')
+      error.status = 404
+      throw error
     }
 
-    return products;
+    return products
   } catch (err) {
-    console.error(
-      `An error occurred when retrieving products - err: ${err.message}`
-    );
-    throw err;
+
+    throw err
   }
-};
+}
 // add new product to the database
 export const createProduct = async (product) => {
-  const newProduct = new Product(product);
-  if (!newProduct) return null;
+  const newProduct = new Product(product)
+  if (!newProduct) return null
 
   try {
-    const savedProduct = await newProduct.save();
-    return savedProduct;
+    const savedProduct = await newProduct.save()
+    return savedProduct
   } catch (err) {
-    console.error(
-      `An error occurred when creating a product - err: ${err.message}`
-    );
-    // logger.error(err.message);
-    return null;
+
+    return null
   }
-};
+}
 
 export const getProductByProductId = async (product_id) => {
   try {
@@ -53,68 +49,82 @@ export const getProductByProductId = async (product_id) => {
     //if available return the product else return error
     let product = await Product.find({ product_id: product_id })
     if (product) {
-      return product;
+      return product
     } else {
-      const error = new Error("Product not found");
-      error.status = 404;
-      throw error;
+      const error = new Error('Product not found')
+      error.status = 404
+      throw error
     }
   } catch (err) {
-    // logger.error(err.message);
-    throw err;
+
+    throw err
   }
-};
+}
 export const retriveOnSaleProduct = async () => {
   try {
     // get all products where sale state is true
-    const  products = await Product.find({
-      product_saleStatus: true,
+    const products = await Product.find({
+      product_sale_status: true,
       product_visible: true,
     }).sort({ _id: -1 })
     // if products are found, return them
     if (products?.length == 0) {
-      const error = new Error("On sale Products not found");
-      error.status = 404;
-      throw error;
+      const error = new Error('On sale Products not found')
+      error.status = 404
+      throw error
     }
-    return products;
+    return products
   } catch (err) {
-    console.log(err);
 
-    throw err;
+    throw err
   }
-};
+}
 export const updateVisiblity = async (product) => {
+  product.product_visible = !product.product_visible
   try {
     // Update the product's pVisible field
-    let newProduct = new Product(product);
-    newProduct.product_visible = true
-    // Save the updated product
-    const updatedProduct = await newProduct.save();
-    return updatedProduct;
-  } catch (error) {
-    return null;
+    const updatedProduct = await Product.findOneAndUpdate(
+      { product_id: product.product_id },
+      { product_visible: product.product_visible },
+      {
+        new: true,
+      },
+    )
+
+    // Return the updated product
+    return updatedProduct
+  } catch (err) {
+
+    return null
   }
-};
+}
 
 export const getRemovedProduct = async (product_id) => {
   try {
     // Delete the product with the specified pId
-    const product = await Product.findByIdAndDelete(product_id);
+    const product = await Product.findOneAndDelete({ product_id: product_id })
     // Return the deleted product
-    return product;
+    return product
   } catch (err) {
-    return null;
+    return null
   }
-};
+}
 
 export const getUpdatedProduct = async (productData) => {
   try {
     // Update the product with the specified pId
-    const updatedProduct = await productData.save();
+    const updatedProduct = await Product.findOneAndUpdate(
+      { product_id: productData.product_id },
+      productData,
+      {
+        new: true,
+      },
+    )
+
     // Return the updated product
-    return updatedProduct;
+    return updatedProduct
   } catch (err) {
-    return null;
+
+    return null
   }
-};
+}
