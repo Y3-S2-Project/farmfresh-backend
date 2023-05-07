@@ -6,6 +6,7 @@ import cartRouter from './cart'
 import categoryRouter from './category'
 import reviewRouter from './review'
 import logisticsRouter from './logistics'
+import paymentRouter from './payment'
 
 const router = Router()
 
@@ -16,5 +17,6 @@ router.use('/categories', categoryRouter)
 router.use('/products', productRouter)
 router.use('/review', reviewRouter)
 router.use('/logistics', logisticsRouter);
+router.use('/payment', paymentRouter)
 
 export default router
