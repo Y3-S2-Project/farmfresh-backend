@@ -1,4 +1,3 @@
-import logger from '../utils/logger'
 import Category from '../models/category'
 //create category
 export const createCategory = async (data) => {
@@ -8,8 +7,8 @@ export const createCategory = async (data) => {
     //save category and return created category
     return await newCategory.save()
   } catch (error) {
-    //log error
-    logger.error(error)
+
+
     return null
   }
 }
@@ -26,9 +25,6 @@ export const getCategory = async (id) => {
     }
     return category
   } catch (error) {
-    //log error
-    logger.error(error)
-    console.log(error.status)
     throw error
   }
 }
@@ -42,8 +38,7 @@ export const getCategories = async () => {
     }
     return categories
   } catch (error) {
-    //log error
-    logger.error(error)
+
     throw error
   }
 }
@@ -54,7 +49,7 @@ export const updateCategory = async ( data) => {
     const updatedCategory = await data.save()
     return updatedCategory
   } catch (error) {
-    logger.error(error)
+
     throw error
   }
 }
@@ -65,7 +60,7 @@ export const deleteCategory = async (id) => {
     const removedCategory = await Category.findByIdAndDelete(id)
     return removedCategory
   } catch (error) { 
-  //  logger.error(error)
+
     throw error
   }
 }

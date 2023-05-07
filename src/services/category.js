@@ -5,6 +5,7 @@ import {
   updateCategory,
   deleteCategory,
 } from '../repositories/category.js'
+
 // add new category and return the created category if it is created else return error
 export const addCategory = async (data) => {
   const createdCategory = await createCategory(data)
