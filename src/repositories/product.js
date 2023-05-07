@@ -49,7 +49,7 @@ export const createProduct = async (product) => {
 
 export const getProductByProductId = async (product_id) => {
   try {
-    // get the product with the specified pPid
+    //get the product with the specified pPid
     //if available return the product else return error
     let product = await Product.find({ product_id: product_id })
     if (product) {
@@ -67,7 +67,7 @@ export const getProductByProductId = async (product_id) => {
 export const retriveOnSaleProduct = async () => {
   try {
     // get all products where sale state is true
-    let products = await Product.find({
+    const  products = await Product.find({
       product_saleStatus: true,
       product_visible: true,
     }).sort({ _id: -1 })
@@ -87,10 +87,10 @@ export const retriveOnSaleProduct = async () => {
 export const updateVisiblity = async (product) => {
   try {
     // Update the product's pVisible field
-    const newProduct = new Product(product);
+    let newProduct = new Product(product);
     newProduct.product_visible = true
     // Save the updated product
-    let updatedProduct = await newProduct.save();
+    const updatedProduct = await newProduct.save();
     return updatedProduct;
   } catch (error) {
     return null;

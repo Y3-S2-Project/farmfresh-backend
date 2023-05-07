@@ -7,6 +7,7 @@ import {
   removeProduct,
   updateProduct,
   allOnSaleProduct,
+  fetchProductById,
 } from '../services/product'
 import { makeResponse } from '../utils/response'
 
