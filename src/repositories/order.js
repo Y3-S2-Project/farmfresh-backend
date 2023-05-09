@@ -9,15 +9,15 @@ export const createOrderRepository = async (data) => {
 }
 
 //get all orders from the database
-// export default getAllOrdersRepository = async (order_id) => {
-//     let orders
-//     if (order_id) {
-//       orders = await Order.find({ order_id }).populate.populate('products.product_id')
-//     } else {
-//       orders = await Order.find().populate('products.product_id').populate('user_id')
-//     }
-//     return orders
-// }
+export const getAllOrdersRepository = async (order_id) => {
+    let orders
+    if (order_id) {
+      orders = await Order.find({ order_id }).populate.populate('products.product_id')
+    } else {
+      orders = await Order.find().populate('products.product_id').populate('user_id')
+    }
+    return orders
+}
 
 //get order by order id from the database
 export const getOrderByIdRepository = async (order_id) => {
