@@ -31,7 +31,7 @@ export const updateOrderStatusRepository = async (order_id, order_status) => {
 
 //update payment status by order id from the database
 export const updatePaymentStatusRepository = async (order_id, payment_status) => {
-    return await Order.findByIdAndUpdate({ order_id }, { payment_status }, { new: true })
+    return await Order.findOneAndUpdate({ order_id }, { payment_status }, { new: true })
 }
 
 //get total count of pending orders from the database
