@@ -1,6 +1,5 @@
 import Product from '../models/product.js'
 
-
 // method to get all products
 export const findProducts = async (farmerId) => {
   //chec whether products are available or not
@@ -25,7 +24,6 @@ export const findProducts = async (farmerId) => {
 
     return products
   } catch (err) {
-
     throw err
   }
 }
@@ -38,7 +36,6 @@ export const createProduct = async (product) => {
     const savedProduct = await newProduct.save()
     return savedProduct
   } catch (err) {
-
     return null
   }
 }
@@ -47,7 +44,7 @@ export const getProductByProductId = async (product_id) => {
   try {
     //get the product with the specified pPid
     //if available return the product else return error
-    let product = await Product.find({ product_id: product_id })
+    let product = await Product.findOne({ product_id: product_id })
     if (product) {
       return product
     } else {
@@ -56,7 +53,6 @@ export const getProductByProductId = async (product_id) => {
       throw error
     }
   } catch (err) {
-
     throw err
   }
 }
@@ -75,7 +71,6 @@ export const retriveOnSaleProduct = async () => {
     }
     return products
   } catch (err) {
-
     throw err
   }
 }
@@ -94,7 +89,6 @@ export const updateVisiblity = async (product) => {
     // Return the updated product
     return updatedProduct
   } catch (err) {
-
     return null
   }
 }
@@ -124,7 +118,6 @@ export const getUpdatedProduct = async (productData) => {
     // Return the updated product
     return updatedProduct
   } catch (err) {
-
     return null
   }
 }
