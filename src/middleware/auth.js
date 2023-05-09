@@ -10,6 +10,7 @@ export const protect = (role) =>
         ? req.headers.authorization.split(' ')[1]
         : null
       : null
+
     if (!token) return makeResponse({ res, status: 403, message: 'Unauthorized' })
     const decodedUser = decodeJwtToken(token).data
 

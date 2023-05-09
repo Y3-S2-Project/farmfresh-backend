@@ -1,17 +1,9 @@
-import { createUser } from '../database/firebase'
 import { createUserRepository, loginRepository, logoutRepository } from '../repositories/auth'
+import { ROLES } from '../utils/constants'
 
-export const buyerSignUpService = async (data) => {
-  return await createUserRepository(data)
-}
 
-export const sellerSignUpService = async (data) => {
-  const { email, password } = data
-  const { uid } = await createUser(email, password)
-  return await createUserRepository({ ...data, uid })
-}
-
-export const adminSignUpService = async (data) => {
+export const signUpService = async (data) => {
+  if (data.current_user_role === ROLES.FARMER) data.role.push(ROLES.BUYER)
   return await createUserRepository(data)
 }
 
