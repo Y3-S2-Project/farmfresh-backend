@@ -9,20 +9,25 @@ import {
 // add new category and return the created category if it is created else return error
 export const addCategory = async (data) => {
   const createdCategory = await createCategory(data)
-  if (!createdCategory) return { status: 500, error: 'Error creating category' }
+  if (!createdCategory) return { status: 500, error: true, message: 'Error creating category' }
 
-  return { status: 201, data: createdCategory, success: 'Category created successfully' }
+  return {
+    status: 201,
+    data: createdCategory,
+    success: true,
+    message: 'Category created successfully',
+  }
 }
 
 //get a category by id and return the category if it is found else return error
 export const getCategoryById = async (id) => {
   try {
     const category = await getCategory(id)
-    return { status: 200, data: category, success: 'Category fetched successfully' }
+    return { status: 200, data: category, success: true, message: 'Category fetched successfully' }
   } catch (err) {
     if (err.status === 404) return { status: err.status, error: true, message: err.message }
 
-    return { status: 500, error: true, message: err.message }
+    return { status: 500, error: true, message: 'Error fetching category' }
   }
 }
 //get all categories and return the categories if they exists else return error
@@ -38,7 +43,7 @@ export const getAllCategories = async () => {
       }
     return { status: 200, success: true, message: 'No categories added yet' }
   } catch (err) {
-    return { status: 500, error: true, message: err.message }
+    return { status: 500, error: true, message: 'Error fetching categories' }
   }
 }
 
@@ -76,7 +81,7 @@ export const removeCategoryById = async (id) => {
     if (result?.status !== 200) return result
     //delete category
     const deletedCategory = await deleteCategory(id)
-    // return { status: 200, message: 'Category deleted successfully', success: true }
+    return { status: 200, message: 'Category deleted successfully', success: true }
   } catch (err) {
     return { status: 500, error: true, message: err.message }
   }
