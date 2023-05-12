@@ -22,7 +22,8 @@ productRouter.get(
 
   getAllProducts,
 )
-
+// Get all products on sale
+productRouter.get('/on-sale', getAllProductsOnSale)
 // Get a single product by ID
 productRouter.get('/:productId', getSingleProduct)
 
@@ -35,14 +36,7 @@ productRouter.patch('/:productId', protect(ROLES.FARMER), editProduct)
 // Delete a product by ID
 productRouter.delete('/:productId', protect(ROLES.FARMER), deleteProduct)
 
-// Get all products on sale
-productRouter.get('/on-sale', getAllProductsOnSale)
-
 // Update the visibility status of a product
-productRouter.patch(
-  '/:productId/visibility',
-  protect(ROLES.ADMIN),
-  updateProductVisibility,
-)
+productRouter.patch('/:productId/visibility', protect(ROLES.ADMIN), updateProductVisibility)
 
 export default productRouter

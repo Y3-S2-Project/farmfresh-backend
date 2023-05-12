@@ -1,6 +1,4 @@
-import { async } from '@firebase/util'
 import asyncHandler from '../middleware/asyncHandler'
-
 import {
   addProduct,
   fetchAllProducts,
@@ -8,55 +6,60 @@ import {
   updateProduct,
   allOnSaleProduct,
   fetchProductById,
+  makeProductVisible,
 } from '../services/product'
 import { makeResponse } from '../utils/response'
 
+//get all products for a specific farmer or all products in db
 export const getAllProducts = asyncHandler(async (req, res) => {
   const result = await fetchAllProducts(req?.user?._id)
 
-  makeResponse({
+  return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 // Function to add a new product
 export const postAddProduct = asyncHandler(async (req, res) => {
   const result = await addProduct(req.body, req.user._id)
 
-  console.log(result)
-  makeResponse({
+  return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 
 // Function to edit an existing product
 export const editProduct = asyncHandler(async (req, res) => {
   const result = await updateProduct(req.params.productId, req.body)
-  makeResponse({
+  return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 
 // Function to delete a product
 export const deleteProduct = asyncHandler(async (req, res) => {
   const result = await removeProduct(req.params.productId)
-  makeResponse({
+  return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 
@@ -66,10 +69,11 @@ export const getAllProductsOnSale = asyncHandler(async (req, res) => {
 
   return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 
@@ -79,19 +83,20 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 
   return makeResponse({
     res,
-    status: result.status,
-    data: result.data,
-    success: result.success,
-    error: result.error,
+    status: result?.status,
+    data: result?.data,
+    success: result?.success,
+    error: result?.error,
+    message: result?.message,
   })
 })
 
 // Function to update product visibility
 export const updateProductVisibility = asyncHandler(async (req, res) => {
-  // mekeProductVisible to all the users
+  // meke a  product visible to all the users
   const result = await makeProductVisible(req.params.productId)
 
-  makeResponse({
+  return makeResponse({
     res,
     status: result.status,
     data: result.data,
