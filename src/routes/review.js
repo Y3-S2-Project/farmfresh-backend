@@ -5,6 +5,8 @@ import {
   createReviewController,
   updateReviewController,
   deleteReviewController,
+  getFarmerOrProductReviewsController,
+  getAllReviewsController,
 } from '../controllers/review'
 
 const router = Router()
@@ -18,4 +20,9 @@ router.put('/:review_id', protect(ROLES.BUYER), updateReviewController)
 //route for deleting a farmer or a product review
 router.delete('/:review_id', protect(ROLES.BUYER), deleteReviewController)
 
+//route for retrieving reviews - specific farmer or specific product
+router.get('/read/', protect(ROLES.BUYER), getFarmerOrProductReviewsController)
+
+//route to retrieve all reviews
+router.get('/', protect(ROLES.ADMIN), getAllReviewsController)
 export default router

@@ -66,3 +66,25 @@ export const deleteReviewRepository = async (review_id) => {
     return null
   }
 }
+
+//get all reviews for a farmer or a product
+export const getFarmerOrProductReviewsRepository = async (id) => {
+  try {
+    const reviews = await Review.find(id)
+    return reviews
+  } catch (error) {
+    console.error(`An error occurred when retrieving reviews - err: ${error.message}`)
+    return nul
+  }
+}
+
+//get all reviews
+export const getAllReviewsRepository = async () => {
+  try {
+    const reviews = await Review.find()
+    return reviews
+  } catch (error) {
+    console.error(`An error occurred when retrieving reviews - err: ${error.message}`)
+    return null
+  }
+}
