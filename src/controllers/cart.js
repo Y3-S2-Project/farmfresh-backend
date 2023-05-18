@@ -5,6 +5,7 @@ import {
   updateQuantityService,
   getCartByUserIdService,
   deleteProductFromCartService,
+  emptyCartService,
 } from '../services/cart.js'
 
 export const createCartController = asyncHandler(async (req, res) => {
@@ -30,4 +31,10 @@ export const deleteProductFromCartController = asyncHandler(async (req, res) => 
   if (!result)
     return makeResponse({ res, status: 500, message: 'Error deleting product from cart' })
   return makeResponse({ res, data: result, message: 'Product deleted successfully' })
+})
+
+export const emptyCartController = asyncHandler(async (req, res) => {
+  const result = await emptyCartService(req.params.user_id)
+  if (!result) return makeResponse({ res, status: 500, message: 'Error emptying the cart' })
+  return makeResponse({ res, data: result, message: 'Cart emptied successfully' })
 })

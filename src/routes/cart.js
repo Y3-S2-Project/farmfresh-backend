@@ -6,6 +6,7 @@ import {
   updateQuantityController,
   getCartByUserIdController,
   deleteProductFromCartController,
+  emptyCartController,
 } from '../controllers/cart'
 
 const router = Router()
@@ -21,5 +22,8 @@ router.get('/:user_id', protect(ROLES.BUYER), getCartByUserIdController)
 
 //route to delete a product from a cart
 router.delete('/:user_id/:product_id', protect(ROLES.BUYER), deleteProductFromCartController)
+
+//route to empty cart
+router.delete('/:user_id', protect(ROLES.BUYER), emptyCartController)
 
 export default router

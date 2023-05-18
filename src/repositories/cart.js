@@ -85,3 +85,21 @@ export const deleteProductFromCartRepository = async (user_id, product_id) => {
     return null
   }
 }
+
+//empty cart
+export const emptyCartRepository = async (user_id) => {
+  try {
+    // Get cart by user id
+    const cart = await Cart.findOne({ user_id })
+    // Check if cart exists - return null if cart does not exist
+    if (!cart) return null
+    // Set the products array to an empty array
+    cart.products = []
+    // Save the updated cart
+    await cart.save()
+    return cart
+  } catch (err) {
+    console.error('Error emptying cart: ', err)
+    return null
+  }
+}
