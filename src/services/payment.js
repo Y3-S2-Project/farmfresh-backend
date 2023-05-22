@@ -13,7 +13,7 @@ const stripe = require('stripe')(
 export const getPaymentIntentService = async (data) => {
   return await stripe.paymentIntents.create({
     amount: data.amount,
-    currency: data.currency || 'lkr',
+    currency: 'lkr',
     automatic_payment_methods: {
       enabled: true,
     },

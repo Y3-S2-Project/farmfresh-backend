@@ -36,7 +36,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), (request, res
   // Return a 200 response to acknowledge receipt of the event
   response.send()
 })
-// router.post('/create', protect(ROLES.BUYER), createPaymentController)
+// // router.post('/create', protect(ROLES.BUYER), createPaymentController)
 router.get('/secret', getPaymentIntentController)
 
 export default router

@@ -9,6 +9,6 @@ import { getPaymentIntentService } from '../services/payment.js'
 // })
 
 export const getPaymentIntentController = asyncHandler(async (req, res) => {
-  const intent = await getPaymentIntentService(req.body)
+  const intent = await getPaymentIntentService(req.query)
   res.json({ client_secret: intent.client_secret })
 })
