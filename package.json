@@ -25,6 +25,7 @@
     "helmet": "^6.1.5",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
+    "stripe": "^12.6.0",
     "uuid": "^8.3.2",
     "winston": "^3.8.2"
   },
