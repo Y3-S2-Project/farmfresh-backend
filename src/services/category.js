@@ -9,7 +9,7 @@ import {
 // add new category and return the created category if it is created else return error
 export const addCategory = async (data) => {
   const createdCategory = await createCategory(data)
-  if (!createdCategory) return { status: 500, error: true, message: 'Error creating category' }
+  if (!createdCategory) return { status: 500,error:true, message: 'Error creating category' }
 
   return {
     status: 201,
