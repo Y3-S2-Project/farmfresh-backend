@@ -1,18 +1,27 @@
 const { expect } = require('chai')
 const { connectTestDB, closeTestDB, clearTestDB } = require('../database/mongo.test.js')
-import { productArray, product, updatedProduct, invalidProduct } from '../utils/mockData.js'
+import {
+  productArray,
+  product,
+  updatedProduct,
+  invalidProduct,
+  farmerId,
+} from '../utils/mockData.js'
 import logger from '../utils/logger.js'
 import {
   addProduct,
-  getAllProducts,
-  getProductById,
-  editProductById,
-  removeProductById,
-} from '../services/product.js'
+  fetchAllProducts,
+  removeProduct,
+  updateProduct,
+  allOnSaleProduct,
+  fetchProductById,
+  makeProductVisible,
+} from '../services/product'
 
+let productId = null
 // description of the test
-describe('Category Service CRUD Operations', () => {
-  //just after describe block, before all tests, execute this
+describe('product Service CRUD Operations', () => {
+  //just after describe block, before all tests, connect to test db
   before(async () => {
     try {
       await connectTestDB()
@@ -20,18 +29,20 @@ describe('Category Service CRUD Operations', () => {
       logger.error(error)
     }
   })
-  // before each test, execute this
+  // before each test, add the products to the db
   beforeEach(async () => {
+    let result = null
     try {
-      for (const category of categoryArray) {
-        await addCategory(category)
+      for (const product of productArray) {
+        result = await addProduct(product, farmerId)
       }
+      productId = result.data.product_id
     } catch (error) {
       logger.error(error)
     }
   })
 
-  // after each test, execute this
+  // after each test drop all the data from the db
   afterEach(async () => {
     try {
       await clearTestDB()
@@ -39,7 +50,7 @@ describe('Category Service CRUD Operations', () => {
       logger.error(error)
     }
   })
-  //after all test drop the db and close the connection
+  //after all tests, drop the db and close the connection
   after(async () => {
     try {
       await closeTestDB()
@@ -47,135 +58,123 @@ describe('Category Service CRUD Operations', () => {
       console.error(error)
     }
   })
-  // Positive test cases for category service
+  // Positive test cases for product service
   describe('Positive Tests', () => {
-    //expect to have data property, status 201, success true and message Category created successfully
-    it('should create a new category', async () => {
-      try {
-        const result = await addCategory(category)
+    //expect to have data property, status 200, success true and message Product fetched successfully
+    it('should get all  products', async () => {
+      const result = await fetchAllProducts()
 
-        expect(result).to.have.property('data')
-        expect(result.status).to.equal(201)
-        expect(result.success).to.be.true
-        expect(result.message).to.equal('Category created successfully')
-      } catch (error) {
-        logger.error(error)
-      }
-    })
-    //expect to have data property, status 200, success true and message Categories fetched successfully
-    it('should get all users', async () => {
-      try {
-        const result = await getAllCategories()
-
-        expect(result).to.have.property('data')
-        expect(result.status).to.equal(200)
-        expect(result.success).to.be.true
-        expect(result.message).to.equal('Categories fetched successfully')
-      } catch (error) {
-        logger.error(error)
-      }
-    })
-    //expect to have data property, status 200, success true and message Category fetched successfully
-    it('should get a category by ID', async () => {
-      try {
-        const result = await getCategoryById('CAT001')
-        expect(result).to.have.property('data')
-        expect(result.status).to.equal(200)
-        expect(result.success).to.be.true
-        expect(result.message).to.equal('Category fetched successfully')
-      } catch (error) {
-        logger.error('get category error', error)
-      }
-    })
-    //expect to have data property, status 200, success true and message Category updated successfully
-    it('should update a category', async () => {
-      const result = await editCategoryById('CAT001', updatedCategory)
       expect(result).to.have.property('data')
       expect(result.status).to.equal(200)
       expect(result.success).to.be.true
-      expect(result.message).to.equal('Category updated successfully')
+      expect(result.message).to.equal('All products')
     })
-    //expect to have data property, status 200, success true and message Category deleted successfully
-    it('should delete a category', async () => {
-      try {
-        const result = await removeCategoryById('CAT001')
-        expect(result.status).to.equal(200)
-        expect(result.success).to.be.true
-        expect(result.message).to.equal('Category deleted successfully')
-      } catch (error) {
-        logger.error('delete category error', error)
-      }
+    //expect to have data property, status 200, success true and message Product fetched successfully
+    it('should get all  products of farmer', async () => {
+      const result = await fetchAllProducts(farmerId)
+
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+      expect(result.message).to.equal('All products')
+    })
+
+    //expect to have data property, status 200, success true and message Product fetched successfully
+    it('should get all  on sale products', async () => {
+      const result = await allOnSaleProduct()
+
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+      expect(result.message).to.equal('All on sale products')
+    })
+    //expect to have data property, status 201, success true and message product created successfully
+    it('should create a new product', async () => {
+      const result = await addProduct(product, farmerId)
+
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(201)
+      expect(result.success).to.be.true
+      expect(result.message).to.equal('Product created successfully')
+    })
+    //expect to have data property, status 200, success true and message product fetched successfully
+    it('should get a product by ID', async () => {
+      const result = await fetchProductById(productId)
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+      expect(result.message).to.equal('Product fetched successfully')
+    })
+
+    //expect to have data property, status 200, success true and message product fetched successfully
+    it('should get a product visibility true', async () => {
+      const result = await makeProductVisible(productId)
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+      expect(result.data.product_visible).to.be.true
+      expect(result.message).to.equal('Product visibility updated successfully')
+    })
+    //expect to have data property, status 200, success true and message product updated successfully
+    it('should update a product', async () => {
+      const result = await updateProduct(productId, updatedProduct)
+      expect(result).to.have.property('data')
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+      expect(result.message).to.equal('Product updated successfully')
+    })
+    //expect to have data property, status 200, success true and message product deleted successfully
+    it('should delete a product', async () => {
+      const result = await removeProduct(productId)
+      expect(result.status).to.equal(200)
+      expect(result.success).to.be.true
+
+      expect(result.message).to.equal('Product deleted successfully')
     })
   })
-  // Negative test cases for category service
+
+  // Negative test cases for product service
   describe('Negative Tests', () => {
-    //expect to have error property, status 500, error true and message Error creating category
-    it('should return an error when creating a category with an property', async () => {
-      try {
-        const result = await addCategory(invalidCategory)
-        expect(result).to.have.property('error')
-        expect(result.status).to.equal(500)
-        expect(result.error).to.be.true
-        expect(result.message).to.equal('Error creating category')
-      } catch (error) {
-        logger.error('ceate category', error)
-      }
-    })
-    //expect to have error property, status 404, error true and message Category not found
-    it('should return an error when getting a category with an invalid ID', async () => {
-      try {
-        const result = await getCategoryById('CAT004')
-        expect(result).to.have.property('error')
-        expect(result.status).to.equal(404)
-        expect(result.error).to.be.true
-        expect(result.message).to.equal('Category not found')
-      } catch (error) {
-        logger.error('get a category', error)
-      }
-    })
-    //expect to have error property, status 404, error true and message Category not found
-    it('should return an error when updating a category with an invalid ID ', async () => {
-      try {
-        const result = await editCategoryById('CAT004', updatedCategory)
-        expect(result).to.have.property('error')
-        expect(result.status).to.equal(404)
-        expect(result.error).to.be.true
-        expect(result.message).to.equal('Category not found')
-      } catch (error) {
-        logger.error('Update a category', error)
-      }
-    })
-    it('should not  update existing data when updating a category with an invalid property', async () => {
-      try {
-        const result = await editCategoryById('CAT001', invalidCategory)
-        expect(result).to.have.property('data')
-        expect(result.status).to.equal(200)
-        expect(result.success).to.be.true
-        expect(result.message).to.equal('Category updated successfully')
-
-        //check if the data is updated
-        const updatedResult = await getCategoryById('CAT001')
-
-        expect(updatedResult.data.category_name).to.equal(result.data.category_name)
-        expect(updatedResult.data.category_description).to.equal(result.data.category_description)
-        expect(updatedResult.data.category_image).to.equal(result.data.category_image)
-        expect(updatedResult.data.category_status).to.equal(result.data.category_status)
-      } catch (error) {
-        logger.error('Update a category', error)
-      }
+    //expect to have error property, status 500, error true and message Error creating product
+    it('should return an error when creating a product with an invalid property', async () => {
+      const result = await addProduct(invalidProduct, farmerId)
+      expect(result).to.have.property('error')
+      expect(result.status).to.equal(500)
+      expect(result.error).to.be.true
+      expect(result.message).to.equal('Internal Server Error creating product')
     })
 
-    //expect to have error property, status 404, error true and message Category not found
-    it('should return an error when deleting a category with an invalid ID', async () => {
-      try {
-        const result = await removeCategoryById('CAT004')
-        expect(result).to.have.property('error')
-        expect(result.status).to.equal(404)
-        expect(result.error).to.be.true
-        expect(result.message).to.equal('Category not found')
-      } catch (error) {
-        logger.error('Delete a category', error)
-      }
+    //expect to have error property, status 404, error true and message product not found
+    it('should return an error when getting a product with an invalid ID', async () => {
+      const result = await fetchProductById('PID09')
+      expect(result).to.have.property('error')
+      expect(result.status).to.equal(404)
+      expect(result.error).to.be.true
+      expect(result.message).to.equal('No producs found for given id')
+    })
+    //expect to have error property, status 404, error true and message product not found
+    it('should return an error when updating a product with an invalid ID ', async () => {
+      const result = await updateProduct('PID099', updatedProduct)
+      expect(result).to.have.property('error')
+      expect(result.status).to.equal(404)
+      expect(result.error).to.be.true
+      expect(result.message).to.equal('No producs found for given id')
+    })
+    it('should not  update existing data when updating a product with an invalid property', async () => {
+      const result = await updateProduct(productId, invalidProduct)
+
+      expect(result.status).to.equal(500)
+      expect(result.message).to.equal('Internal Server Error updating product')
+
+    })
+
+    //expect to have error property, status 404, error true and message product not found
+    it('should return an error when deleting a product with an invalid ID', async () => {
+      const result = await removeProduct('PID009')
+      expect(result).to.have.property('error')
+      expect(result.status).to.equal(404)
+      expect(result.error).to.be.true
+      expect(result.message).to.equal('No producs found for given id')
     })
   })
 })
