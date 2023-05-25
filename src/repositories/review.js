@@ -22,10 +22,69 @@ const setReviewId = async () => {
 
 //create review
 export const createReviewRepository = async (data) => {
-  const reviewId = await setReviewId()
-  const review = new Review({
-    ...data,
-    review_id: reviewId,
-  })
-  return await review.save()
+  try {
+    const reviewId = await setReviewId()
+    const review = new Review({
+      ...data,
+      review_id: reviewId,
+    })
+    return await review.save()
+  } catch (error) {
+    console.error(`An error occurred when creating a review - err: ${error.message}`)
+    return null
+  }
+}
+
+//update review
+export const updateReviewRepository = async (review_id, data) => {
+  try {
+    //check if review exists
+    const review = await Review.findOne({ review_id })
+    if (!review) return null
+
+    //update review
+    const updatedReview = await review.updateOne(data, { new: true })
+    return updatedReview
+  } catch (error) {
+    console.error(`An error occurred when updating a review - err: ${error.message}`)
+    return null
+  }
+}
+
+//delete review
+export const deleteReviewRepository = async (review_id) => {
+  try {
+    //check if review exists
+    const review = await Review.findOne({ review_id })
+    if (!review) return null
+
+    //delete review
+    const deletedReview = await review.deleteOne()
+    return deletedReview
+  } catch (error) {
+    console.error(`An error occurred when deleting a review - err: ${error.message}`)
+    return null
+  }
+}
+
+//get all reviews for a farmer or a product
+export const getFarmerOrProductReviewsRepository = async (id) => {
+  try {
+    const reviews = await Review.find(id)
+    return reviews
+  } catch (error) {
+    console.error(`An error occurred when retrieving reviews - err: ${error.message}`)
+    return nul
+  }
+}
+
+//get all reviews
+export const getAllReviewsRepository = async () => {
+  try {
+    const reviews = await Review.find()
+    return reviews
+  } catch (error) {
+    console.error(`An error occurred when retrieving reviews - err: ${error.message}`)
+    return null
+  }
 }
