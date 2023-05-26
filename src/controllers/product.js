@@ -7,12 +7,20 @@ import {
   allOnSaleProduct,
   fetchProductById,
   makeProductVisible,
+
+  fetchFarmerProducts,
+
 } from '../services/product'
 import { makeResponse } from '../utils/response'
 
 //get all products for a specific farmer or all products in db
 export const getAllProducts = asyncHandler(async (req, res) => {
-  const result = await fetchAllProducts(req?.user?._id)
+  let result = null
+  if (req?.user?.id) {
+    result = await fetchFarmerProducts(req?.user?._id)
+  } else {
+    result = await fetchAllProducts()
+  }
 
   return makeResponse({
     res,
@@ -53,6 +61,7 @@ export const editProduct = asyncHandler(async (req, res) => {
 // Function to delete a product
 export const deleteProduct = asyncHandler(async (req, res) => {
   const result = await removeProduct(req.params.productId)
+
   return makeResponse({
     res,
     status: result?.status,
@@ -94,7 +103,9 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 // Function to update product visibility
 export const updateProductVisibility = asyncHandler(async (req, res) => {
   // meke a  product visible to all the users
-  const result = await makeProductVisible(req.params.productId)
+
+  const result = await makeProductVisible(req.params.productId, req.body.visibility)
+
 
   return makeResponse({
     res,

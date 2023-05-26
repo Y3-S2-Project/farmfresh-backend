@@ -9,9 +9,7 @@ import {
   getUpdatedProduct,
 } from '../repositories/product'
 
-
 export const allOnSaleProduct = async () => {
-    
   try {
     //get all on sale products
     const result = await retriveOnSaleProduct()
@@ -25,20 +23,22 @@ export const allOnSaleProduct = async () => {
     if (error.status === 404) {
       return {
         status: 404,
-        error: 'No on sale products found',
+        error: true,
+        message: 'No on sale products found',
       }
     } else {
       return {
         status: 500,
-        error: 'Internal Server Error fetching  all on products',
+        error: true,
+        message: 'Internal Server Error fetching  all on products',
       }
     }
   }
 }
-export const fetchAllProducts = async (farmerId) => {
+export const fetchAllProducts = async () => {
   try {
     //get the products
-    const reuslt = await findProducts(farmerId)
+    const reuslt = await findProducts()
     //check if the products exist if exist return the products else return error
 
     return {
@@ -63,9 +63,37 @@ export const fetchAllProducts = async (farmerId) => {
     }
   }
 }
+export const fetchFarmerProducts = async (farmerId) => {
+  try {
+    //get the products
+    const reuslt = await findProducts(farmerId)
+    //check if the products exist if exist return the products else return error
+
+    return {
+      status: 200,
+      data: reuslt,
+      success: true,
+      message: 'All famer products',
+    }
+  } catch (error) {
+    if (error.status === 404) {
+      return {
+        status: 404,
+        error: true,
+        message: 'No products found',
+      }
+    } else {
+      return {
+        status: 500,
+        true: true,
+        message: 'Internal Server Error fetching products',
+      }
+    }
+  }
+}
+
 //get product by id
 export const fetchProductById = async (productId) => {
-
   //get the product and return if it exist else return error
   try {
     const result = await getProductByProductId(productId)
@@ -73,13 +101,13 @@ export const fetchProductById = async (productId) => {
       status: 200,
       data: result,
       success: true,
-      message: 'Product found',
+      message: 'Product fetched successfully',
     }
   } catch (error) {
     if (error.status === 404) {
       return {
         status: 404,
-        message: 'No producs found',
+        message: 'No producs found for given id',
         error: true,
       }
     } else {
@@ -92,12 +120,12 @@ export const fetchProductById = async (productId) => {
   }
 }
 //update product visibility
-export const makeProductVisible = async (productId) => {
+export const makeProductVisible = async (productId, visiblity) => {
   //get the product and update the visibility and return the updated product
   const result = await fetchProductById(productId)
   //check if the product exist if exist update the visibility else return error
   if (result.status === 200) {
-    const updatedResult = await updateVisiblity(result.data[0])
+    const updatedResult = await updateVisiblity(productId, visiblity)
     if (updatedResult) {
       return {
         status: 200,
@@ -157,6 +185,7 @@ export const removeProduct = async (product_id) => {
   }
 
   const deleteProduct = await getRemovedProduct(product_id)
+
   if (deleteProduct) {
     return {
       status: 200,
@@ -179,19 +208,20 @@ export const updateProduct = async (product_id, productData) => {
   if (result.status !== 200) {
     return result
   }
+
   //update the product and return the updated product
   const newProductDetails = {
     product_id: product_id,
-    product_name: productData.product_name || result.data[0].product_name,
-    product_status: productData.product_status || result.data[0].product_status,
-    product_category: productData.product_category || result.data[0].product_category,
-    product_quantity: productData.product_quantity || result.data[0].product_quantity,
-    product_price: productData.product_price || result.data[0].product_price,
-    product_offer: productData.product_offer || result.data[0].product_offer,
-    product_weight: productData.product_weight || result.data[0].product_weight,
-    product_images: productData.product_images || result.data[0].product_images,
+    product_name: productData?.product_name || result.data[0]?.product_name,
+    product_status: productData?.product_status || result.data[0]?.product_status,
+    product_category: productData?.product_category || result.data[0]?.product_category,
+    product_quantity: productData?.product_quantity || result.data[0]?.product_quantity,
+    product_price: productData?.product_price || result.data[0]?.product_price,
+    product_offer: productData?.product_offer || result.data[0]?.product_offer,
+    product_weight: productData?.product_weight || result.data[0]?.product_weight,
+    product_images: productData?.product_images || result.data[0]?.product_images,
     product_visible: false,
-    product_sale_status: productData.product_sale_status || result.data[0].product_sale_status,
+    product_sale_status: productData?.product_sale_status || result.data[0]?.product_sale_status,
   }
   const updatedProduct = await getUpdatedProduct(newProductDetails)
 
