@@ -74,13 +74,12 @@ export const retriveOnSaleProduct = async () => {
     throw err
   }
 }
-export const updateVisiblity = async (product) => {
-  product.product_visible = !product.product_visible
+export const updateVisiblity = async (product_id, visiblity) => {
   try {
     // Update the product's pVisible field
     const updatedProduct = await Product.findOneAndUpdate(
-      { product_id: product.product_id },
-      { product_visible: product.product_visible },
+      { product_id: product_id },
+      { product_visible: visiblity },
       {
         new: true,
       },

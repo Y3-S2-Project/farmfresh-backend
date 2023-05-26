@@ -5,9 +5,10 @@ import {
   updateCategory,
   deleteCategory,
 } from '../repositories/category.js'
-
+import { v4 as uuidv4 } from 'uuid'
 // add new category and return the created category if it is created else return error
 export const addCategory = async (data) => {
+  data.category_id = `CID${uuidv4()}`
   const createdCategory = await createCategory(data)
   if (!createdCategory) return { status: 500,error:true, message: 'Error creating category' }
 
@@ -23,7 +24,8 @@ export const addCategory = async (data) => {
 export const getCategoryById = async (id) => {
   try {
     const category = await getCategory(id)
-    return { status: 200, data: category, success: true, message: 'Category fetched successfully' }
+
+    return { status: 200, data: category, success: 'Category fetched successfully' }
   } catch (err) {
     if (err.status === 404) return { status: err.status, error: true, message: err.message }
 
@@ -49,8 +51,10 @@ export const getAllCategories = async () => {
 
 //edit category and return the edited category if it is edited else return error
 export const editCategoryById = async (id, data) => {
+  console.log('New data', data)
   try {
     const result = await getCategoryById(id)
+
     //if category not found or sever error , return error
     if (result?.status !== 200) return result
     //update category data
@@ -81,7 +85,12 @@ export const removeCategoryById = async (id) => {
     if (result?.status !== 200) return result
     //delete category
     const deletedCategory = await deleteCategory(id)
-    return { status: 200, message: 'Category deleted successfully', success: true }
+    return {
+      status: 200,
+      message: 'Category deleted successfully',
+      data: deletedCategory,
+      success: true,
+    }
   } catch (err) {
     return { status: 500, error: true, message: err.message }
   }
