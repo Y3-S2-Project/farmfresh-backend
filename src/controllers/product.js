@@ -7,7 +7,9 @@ import {
   allOnSaleProduct,
   fetchProductById,
   makeProductVisible,
+
   fetchFarmerProducts,
+
 } from '../services/product'
 import { makeResponse } from '../utils/response'
 
@@ -103,6 +105,7 @@ export const updateProductVisibility = asyncHandler(async (req, res) => {
   // meke a  product visible to all the users
 
   const result = await makeProductVisible(req.params.productId, req.body.visibility)
+
 
   return makeResponse({
     res,

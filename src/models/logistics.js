@@ -6,9 +6,9 @@ const LogisticsSchema = new Schema(
       type: String,
       required: true,
     },
-    order_id: {
+    user_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Order',
+      ref: 'User',
     },
     delivery_type: {
       type: String,

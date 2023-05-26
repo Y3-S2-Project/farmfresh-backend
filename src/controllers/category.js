@@ -1,6 +1,7 @@
 //create category and return created category
 import asyncHandler from '../middleware/asyncHandler'
 import { makeResponse } from '../utils/response'
+
 import {
   addCategory,
   getCategoryById,
