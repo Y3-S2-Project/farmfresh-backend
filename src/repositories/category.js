@@ -15,8 +15,9 @@ export const getCategory = async (id) => {
   try {
     //find category by id
     const category = await Category.findOne({
-      category_id: id,
+      _id: id,
     })
+
     //if category not found throw error
     if (!category) {
       const error = new Error('Category not found')
@@ -56,7 +57,7 @@ export const deleteCategory = async (id) => {
   try {
     //find category by id and delete
     const removedCategory = await Category.findOneAndDelete({
-      category_id: id,
+      _id: id,
     })
     return removedCategory
   } catch (error) {

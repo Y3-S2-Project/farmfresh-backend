@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 export const addCategory = async (data) => {
   data.category_id = `CID${uuidv4()}`
   const createdCategory = await createCategory(data)
-  if (!createdCategory) return { status: 500,error:true, message: 'Error creating category' }
+  if (!createdCategory) return { status: 500, error: true, message: 'Error creating category' }
 
   return {
     status: 201,
@@ -23,9 +23,10 @@ export const addCategory = async (data) => {
 //get a category by id and return the category if it is found else return error
 export const getCategoryById = async (id) => {
   try {
+
     const category = await getCategory(id)
 
-    return { status: 200, data: category, success: 'Category fetched successfully' }
+    return { status: 200, data: category, success: true, message: 'Category fetched successfully' }
   } catch (err) {
     if (err.status === 404) return { status: err.status, error: true, message: err.message }
 
@@ -52,9 +53,10 @@ export const getAllCategories = async () => {
 //edit category and return the edited category if it is edited else return error
 export const editCategoryById = async (id, data) => {
   console.log('New data', data)
+
   try {
     const result = await getCategoryById(id)
-
+    console.log(result, result)
     //if category not found or sever error , return error
     if (result?.status !== 200) return result
     //update category data
@@ -66,7 +68,7 @@ export const editCategoryById = async (id, data) => {
 
     //save category and return updated category
     const updatedCategory = await updateCategory(result.data)
-
+    console.log(updateCategory)
     return {
       status: 200,
       data: updatedCategory,
