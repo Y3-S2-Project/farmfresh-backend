@@ -40,13 +40,13 @@ describe('Category Service CRUD Operations', () => {
     }
   })
   //after all test drop the db and close the connection
-  after(async () => {
-    try {
-      await closeTestDB()
-    } catch (error) {
-      logger.error(error)
-    }
-  })
+  // after(async () => {
+  //   try {
+  //     await closeTestDB()
+  //   } catch (error) {
+  //     logger.error(error)
+  //   }
+  // })
   // Positive test cases for category service
   describe('Positive Tests', () => {
     //expect to have data property, status 201, success true and message Category created successfully
@@ -59,7 +59,7 @@ describe('Category Service CRUD Operations', () => {
       expect(result.message).to.equal('Category created successfully')
     })
     //expect to have data property, status 200, success true and message Categories fetched successfully
-    it('should get all users', async () => {
+    it('should get all categories', async () => {
       const result = await getAllCategories()
 
       expect(result).to.have.property('data')

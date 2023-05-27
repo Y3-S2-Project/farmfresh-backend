@@ -52,11 +52,11 @@ export const getAllCategories = async () => {
 
 //edit category and return the edited category if it is edited else return error
 export const editCategoryById = async (id, data) => {
-  console.log('New data', data)
+
 
   try {
     const result = await getCategoryById(id)
-    console.log(result, result)
+
     //if category not found or sever error , return error
     if (result?.status !== 200) return result
     //update category data
@@ -68,7 +68,7 @@ export const editCategoryById = async (id, data) => {
 
     //save category and return updated category
     const updatedCategory = await updateCategory(result.data)
-    console.log(updateCategory)
+
     return {
       status: 200,
       data: updatedCategory,

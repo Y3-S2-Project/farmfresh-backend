@@ -165,7 +165,6 @@ describe('product Service CRUD Operations', () => {
 
       expect(result.status).to.equal(500)
       expect(result.message).to.equal('Internal Server Error updating product')
-
     })
 
     //expect to have error property, status 404, error true and message product not found

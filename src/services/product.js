@@ -223,12 +223,12 @@ export const updateProduct = async (product_id, productData) => {
     product_visible: false,
     product_sale_status: productData?.product_sale_status || result.data[0]?.product_sale_status,
   }
-  const updatedProduct = await getUpdatedProduct(newProductDetails)
-
-  if (updatedProduct) {
+  const updatedProducted = await getUpdatedProduct(newProductDetails)
+  console.log(updatedProducted)
+  if (updatedProducted) {
     return {
       status: 200,
-      data: updatedProduct,
+      data: updatedProducted,
       success: true,
       message: 'Product updated successfully',
     }
