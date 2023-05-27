@@ -16,6 +16,8 @@ const categorySchema = new mongoose.Schema(
     },
     category_id: {
       type: String,
+      uniqiue: true,
+      required: true,
     },
   },
   {
