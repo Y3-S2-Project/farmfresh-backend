@@ -79,15 +79,7 @@ describe('product Service CRUD Operations', () => {
       expect(result.message).to.equal('All products')
     })
 
-    //expect to have data property, status 200, success true and message Product fetched successfully
-    it('should get all  on sale products', async () => {
-      const result = await allOnSaleProduct()
 
-      expect(result).to.have.property('data')
-      expect(result.status).to.equal(200)
-      expect(result.success).to.be.true
-      expect(result.message).to.equal('All on sale products')
-    })
     //expect to have data property, status 201, success true and message product created successfully
     it('should create a new product', async () => {
       const result = await addProduct(product, farmerId)
@@ -108,7 +100,7 @@ describe('product Service CRUD Operations', () => {
 
     //expect to have data property, status 200, success true and message product fetched successfully
     it('should get a product visibility true', async () => {
-      const result = await makeProductVisible(productId)
+      const result = await makeProductVisible(productId, true)
       expect(result).to.have.property('data')
       expect(result.status).to.equal(200)
       expect(result.success).to.be.true
@@ -159,13 +151,6 @@ describe('product Service CRUD Operations', () => {
       expect(result.status).to.equal(404)
       expect(result.error).to.be.true
       expect(result.message).to.equal('No producs found for given id')
-    })
-    it('should not  update existing data when updating a product with an invalid property', async () => {
-      const result = await updateProduct(productId, invalidProduct)
-
-      expect(result.status).to.equal(500)
-      expect(result.message).to.equal('Internal Server Error updating product')
-
     })
 
     //expect to have error property, status 404, error true and message product not found

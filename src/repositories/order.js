@@ -8,11 +8,11 @@ export const createOrderRepository = async (data) => {
   return await newOrder.save()
 }
 
-//get all orders from the database
+// get all orders from the database
 export const getAllOrdersRepository = async (order_id) => {
     let orders
     if (order_id) {
-      orders = await Order.findOne({ order_id }).populate.populate('products.product_id')
+      orders = await Order.find({ order_id }).populate.populate('products.product_id')
     } else {
       orders = await Order.find().populate('products.product_id').populate('user_id')
     }

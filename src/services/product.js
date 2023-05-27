@@ -17,7 +17,8 @@ export const allOnSaleProduct = async () => {
     return {
       status: 200,
       data: result,
-      success: 'All on sale products',
+      success: true,
+      message: 'All on sale products',
     }
   } catch (error) {
     if (error.status === 404) {
@@ -57,7 +58,7 @@ export const fetchAllProducts = async () => {
     } else {
       return {
         status: 500,
-        true: true,
+        error: true,
         message: 'Internal Server Error fetching products',
       }
     }
@@ -223,12 +224,12 @@ export const updateProduct = async (product_id, productData) => {
     product_visible: false,
     product_sale_status: productData?.product_sale_status || result.data[0]?.product_sale_status,
   }
-  const updatedProduct = await getUpdatedProduct(newProductDetails)
+  const updatedProducted = await getUpdatedProduct(newProductDetails)
 
-  if (updatedProduct) {
+  if (updatedProducted) {
     return {
       status: 200,
-      data: updatedProduct,
+      data: updatedProducted,
       success: true,
       message: 'Product updated successfully',
     }

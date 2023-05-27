@@ -7,8 +7,6 @@ export const createCategory = async (data) => {
     //save category and return created category
     return await newCategory.save()
   } catch (error) {
-
-
     return null
   }
 }
@@ -16,7 +14,10 @@ export const createCategory = async (data) => {
 export const getCategory = async (id) => {
   try {
     //find category by id
-    const category = await Category.findById(id)
+    const category = await Category.findOne({
+      _id: id,
+    })
+    console.log(category)
     //if category not found throw error
     if (!category) {
       const error = new Error('Category not found')
@@ -38,29 +39,28 @@ export const getCategories = async () => {
     }
     return categories
   } catch (error) {
-
     throw error
   }
 }
 
-export const updateCategory = async ( data) => {
+export const updateCategory = async (data) => {
   try {
     //save updated category and return updated category
     const updatedCategory = await data.save()
     return updatedCategory
   } catch (error) {
-
     throw error
   }
 }
 
-export const deleteCategory = async (id) => { 
+export const deleteCategory = async (id) => {
   try {
     //find category by id and delete
-    const removedCategory = await Category.findByIdAndDelete(id)
+    const removedCategory = await Category.findOneAndDelete({
+      _id: id,
+    })
     return removedCategory
-  } catch (error) { 
-
+  } catch (error) {
     throw error
   }
 }
