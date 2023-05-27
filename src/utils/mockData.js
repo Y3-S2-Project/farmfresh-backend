@@ -70,9 +70,10 @@ export const productArray = [
       'https://firebasestorage.googleapis.com/v0/b/upload-file-aaea2.appspot.com/o/itemsImages%2FWhatsApp%20Image%202023-04-26%20at%2019.41.54.jpeg6b239eda-efa8-4213-8a64-61bec1601ead?alt=media&token=60c51b2a-3b73-46d7-b5cf-7d780b0aa013',
     ],
     product_quantity: 67,
-    product_visible: true,
+
     product_weight: 45,
     product_sale_status: true,
+    product_visible: true,
   },
   {
     product_name: 'Carrot',
@@ -85,9 +86,10 @@ export const productArray = [
       'https://firebasestorage.googleapis.com/v0/b/upload-file-aaea2.appspot.com/o/itemsImages%2FWhatsApp%20Image%202023-04-26%20at%2019.41.54.jpeg6b239eda-efa8-4213-8a64-61bec1601ead?alt=media&token=60c51b2a-3b73-46d7-b5cf-7d780b0aa013',
     ],
     product_quantity: 67,
-    product_visible: true,
+
     product_weight: 45,
     product_sale_status: true,
+    product_visible: true,
   },
   {
     product_name: 'Corn',
@@ -100,9 +102,9 @@ export const productArray = [
       'https://firebasestorage.googleapis.com/v0/b/upload-file-aaea2.appspot.com/o/itemsImages%2FWhatsApp%20Image%202023-04-26%20at%2019.41.54.jpeg6b239eda-efa8-4213-8a64-61bec1601ead?alt=media&token=60c51b2a-3b73-46d7-b5cf-7d780b0aa013',
     ],
     product_quantity: 67,
-    product_visible: true,
     product_weight: 45,
     product_sale_status: true,
+    product_visible: true,
   },
 ]
 
@@ -154,4 +156,4 @@ export const invalidProduct = {
 }
 const fmIdString = '6456880b47d94ecc03cb4529'
 export const farmerId = new mongoose.Types.ObjectId(fmIdString)
-
+export const invalidCategoryObjectId = new mongoose.Types.ObjectId('6456880b47d94ecc03cb4529')

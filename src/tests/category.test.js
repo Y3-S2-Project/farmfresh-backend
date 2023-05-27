@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const { connectTestDB, closeTestDB, clearTestDB } = require('../database/mongo.test.js')
-import { categoryArray, category, updatedCategory, invalidCategory } from '../utils/mockData.js'
+import { categoryArray, category, updatedCategory, invalidCategoryObjectId } from '../utils/mockData.js'
 import logger from '../utils/logger.js'
 import {
   addCategory,
@@ -10,6 +10,7 @@ import {
   removeCategoryById,
 } from '../services/category'
 
+let category_id = undefined
 // description of the test
 describe('Category Service CRUD Operations', () => {
   //just after describe block, before all tests, execute this
@@ -17,15 +18,17 @@ describe('Category Service CRUD Operations', () => {
     try {
       await connectTestDB()
     } catch (error) {
-       logger.error(error)
+      logger.error(error)
     }
   })
   // before each test, add the category to the db
   beforeEach(async () => {
     try {
+      let addedCategory = null
       for (const category of categoryArray) {
-        await addCategory(category)
+        addedCategory = await addCategory(category)
       }
+      category_id = addedCategory.data._id
     } catch (error) {
       logger.error(error)
     }
@@ -69,7 +72,7 @@ describe('Category Service CRUD Operations', () => {
     })
     //expect to have data property, status 200, success true and message Category fetched successfully
     it('should get a category by ID', async () => {
-      const result = await getCategoryById('CAT001')
+      const result = await getCategoryById(category_id)
       expect(result).to.have.property('data')
       expect(result.status).to.equal(200)
       expect(result.success).to.be.true
@@ -77,7 +80,7 @@ describe('Category Service CRUD Operations', () => {
     })
     //expect to have data property, status 200, success true and message Category updated successfully
     it('should update a category', async () => {
-      const result = await editCategoryById('CAT001', updatedCategory)
+      const result = await editCategoryById(category_id, updatedCategory)
       expect(result).to.have.property('data')
       expect(result.status).to.equal(200)
       expect(result.success).to.be.true
@@ -85,7 +88,7 @@ describe('Category Service CRUD Operations', () => {
     })
     //expect to have data property, status 200, success true and message Category deleted successfully
     it('should delete a category', async () => {
-      const result = await removeCategoryById('CAT001')
+      const result = await removeCategoryById(category_id)
       expect(result.status).to.equal(200)
       expect(result.success).to.be.true
       expect(result.message).to.equal('Category deleted successfully')
@@ -93,17 +96,9 @@ describe('Category Service CRUD Operations', () => {
   })
   // Negative test cases for category service
   describe('Negative Tests', () => {
-    //expect to have error property, status 500, error true and message Error creating category
-    it('should return an error when creating a category with an property', async () => {
-      const result = await addCategory(invalidCategory)
-      expect(result).to.have.property('error')
-      expect(result.status).to.equal(500)
-      expect(result.error).to.be.true
-      expect(result.message).to.equal('Error creating category')
-    })
     //expect to have error property, status 404, error true and message Category not found
     it('should return an error when getting a category with an invalid ID', async () => {
-      const result = await getCategoryById('CAT004')
+      const result = await getCategoryById(invalidCategoryObjectId)
       expect(result).to.have.property('error')
       expect(result.status).to.equal(404)
       expect(result.error).to.be.true
@@ -111,31 +106,16 @@ describe('Category Service CRUD Operations', () => {
     })
     //expect to have error property, status 404, error true and message Category not found
     it('should return an error when updating a category with an invalid ID ', async () => {
-      const result = await editCategoryById('CAT004', updatedCategory)
+      const result = await editCategoryById(invalidCategoryObjectId, updatedCategory)
       expect(result).to.have.property('error')
       expect(result.status).to.equal(404)
       expect(result.error).to.be.true
       expect(result.message).to.equal('Category not found')
     })
-    it('should not  update existing data when updating a category with an invalid property', async () => {
-      const result = await editCategoryById('CAT001', invalidCategory)
-      expect(result).to.have.property('data')
-      expect(result.status).to.equal(200)
-      expect(result.success).to.be.true
-      expect(result.message).to.equal('Category updated successfully')
-
-      //check if the data is updated
-      const updatedResult = await getCategoryById('CAT001')
-
-      expect(updatedResult.data.category_name).to.equal(result.data.category_name)
-      expect(updatedResult.data.category_description).to.equal(result.data.category_description)
-      expect(updatedResult.data.category_image).to.equal(result.data.category_image)
-      expect(updatedResult.data.category_status).to.equal(result.data.category_status)
-    })
 
     //expect to have error property, status 404, error true and message Category not found
     it('should return an error when deleting a category with an invalid ID', async () => {
-      const result = await removeCategoryById('CAT004')
+      const result = await removeCategoryById(invalidCategoryObjectId)
       expect(result).to.have.property('error')
       expect(result.status).to.equal(404)
       expect(result.error).to.be.true

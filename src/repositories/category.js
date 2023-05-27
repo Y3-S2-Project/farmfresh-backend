@@ -17,7 +17,7 @@ export const getCategory = async (id) => {
     const category = await Category.findOne({
       _id: id,
     })
-
+    console.log(category)
     //if category not found throw error
     if (!category) {
       const error = new Error('Category not found')
